@@ -44,7 +44,10 @@ public class Player extends Entity{
 				y+=speed;			
 			} 
 			
+			catchFruit();
+			
 		}
+	
 
 	public void render(Graphics g) {
 		if (lastDir == 1) super.render(g);
@@ -53,4 +56,16 @@ public class Player extends Entity{
 		
 	}
 
+	
+	public void catchFruit() {
+		for (int i = 0; i < Game.entities.size(); i++) {
+			Entity current = Game.entities.get(i);
+			if (current instanceof Strawberry) {
+				if (Entity.isColliding(this, current)) {
+					Game.entities.remove(i);
+					return;
+				}
+			}
+		}
+	}
 }
