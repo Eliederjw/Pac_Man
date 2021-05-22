@@ -46,6 +46,10 @@ public class Player extends Entity{
 			
 			catchFruit();
 			
+			if (Game.strawberryCount == Game.strawberryTotal) {
+				System.out.println("Você ganhou!");
+			}
+			
 		}
 	
 
@@ -62,6 +66,7 @@ public class Player extends Entity{
 			Entity current = Game.entities.get(i);
 			if (current instanceof Strawberry) {
 				if (Entity.isColliding(this, current)) {
+					Game.strawberryCount++;
 					Game.entities.remove(i);
 					return;
 				}

@@ -38,13 +38,14 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	private BufferedImage image;
 	
 	public static List<Entity> entities;
-	public static Spritesheet spritesheet;	
-	public static World world;	
-	public static Player player;	
+	public static Spritesheet spritesheet;
+	public static World world;
+	public static Player player;
 	
 	public UI ui;
 	
-	public static int strawberryCount = 0;		
+	public static int strawberryTotal = 0;
+	public static int strawberryCount = 0;
 	
 	public Game() {
 		addKeyListener(this);
@@ -55,13 +56,13 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 		
-//		Inicializando objetos		
-		spritesheet = new Spritesheet("/Spritesheet.png");	
-		entities = new ArrayList<Entity>();	
+//		Inicializando objetos
+		spritesheet = new Spritesheet("/Spritesheet.png");
+		entities = new ArrayList<Entity>();
 		player = new Player(0, 0, 16, 16, 2, spritesheet.getSprite(32, 0, 16, 16));
 		world = new World("/level1.png");
 		ui = new UI();
-		entities.add(player);	
+		entities.add(player);
 	
 	}
 	
@@ -70,7 +71,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		frame.add(this);
 		
 		frame.setResizable(false);
-		frame.pack();					
+		frame.pack();	
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
@@ -145,7 +146,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		}
 		Graphics g = image.getGraphics();
 		g.setColor(new Color(0, 0, 0));
-		g.fillRect(0, 0, WIDTH, HEIGHT);		
+		g.fillRect(0, 0, WIDTH, HEIGHT);
 				
 //		Render World
 		world.render(g);
@@ -159,9 +160,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		}
 		
 		g.dispose();
-		g = bs.getDrawGraphics();			
+		g = bs.getDrawGraphics();		
 		g.drawImage(image, 0, 0, WIDTH * SCALE, HEIGHT * SCALE, null );
-		ui.render(g);	 					
+		ui.render(g);
 		
 		bs.show();
 	}
@@ -174,7 +175,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	}
 
 	@Override
-	public void keyPressed(KeyEvent e) {	
+	public void keyPressed(KeyEvent e) {
 	
 		if (e.getKeyCode() == KeyEvent.VK_RIGHT ||
 				e.getKeyCode() == KeyEvent.VK_D) {
@@ -204,7 +205,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			
 		}else if (e.getKeyCode() == KeyEvent.VK_LEFT ||
 				e.getKeyCode() == KeyEvent.VK_A) {
-			player.left = false;;
+			player.left = false;
 		}
 		
 		if (e.getKeyCode() == KeyEvent.VK_UP ||
@@ -216,7 +217,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			player.down = false;
 		}		
 	}
-		
+
 	// MOUSE EVENTS
 	@Override
 	public void mouseClicked(MouseEvent e) {

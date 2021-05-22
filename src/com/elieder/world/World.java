@@ -50,7 +50,8 @@ public class World {
 					}else if(pixelCurrent == 0xFFFF0000) {
 						//Strawberry
 						Strawberry strawberry = new Strawberry(xx*16, yy*16, 16, 16, 0, Entity.STRAWBERRY_SPRITE);
-						Game.entities.add(strawberry);						
+						Game.entities.add(strawberry);
+						Game.strawberryTotal++;
 					}
 				}
 			}
