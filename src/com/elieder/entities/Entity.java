@@ -15,7 +15,7 @@ import com.elieder.world.World;
 
 public class Entity {
 	
-	public static BufferedImage STRAWBERRY_SPRITE = Game.spritesheet.getSprite(64, 0, 16, 16);
+	public static BufferedImage FOOD_SPRITE = Game.spritesheet.getSprite(6*16, 0, 16, 16);
 	
 	protected double x;
 	protected double y;
@@ -23,7 +23,7 @@ public class Entity {
 	protected int height;
 	protected double speed;
 	
-	public int depth;	
+	public int depth;
 	
 	protected List<Node> path;
 	

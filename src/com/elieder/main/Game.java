@@ -44,8 +44,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	
 	public UI ui;
 	
-	public static int strawberryTotal = 0;
-	public static int strawberryCount = 0;
+	public static int FoodTotal = 0;
+	public static int FoodCount = 0;
 	
 	public Game() {
 		addKeyListener(this);

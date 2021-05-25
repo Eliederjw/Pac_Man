@@ -7,7 +7,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import com.elieder.entities.Entity;
-import com.elieder.entities.Strawberry;
+import com.elieder.entities.Food;
 import com.elieder.main.Game;
 
 public class World {
@@ -48,10 +48,10 @@ public class World {
 						// Enemy
 											
 					}else if(pixelCurrent == 0xFFFF0000) {
-						//Strawberry
-						Strawberry strawberry = new Strawberry(xx*16, yy*16, 16, 16, 0, Entity.STRAWBERRY_SPRITE);
-						Game.entities.add(strawberry);
-						Game.strawberryTotal++;
+						//Food
+						Food food = new Food(xx*16, yy*16, 16, 16, 0, Entity.FOOD_SPRITE);
+						Game.entities.add(food);
+						Game.FoodTotal++;
 					}
 				}
 			}

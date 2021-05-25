@@ -11,15 +11,33 @@ public class Player extends Entity{
 	
 	public boolean right, up, left, down;
 	
-	public BufferedImage sprite_left;
 	
-	public int lastDir = 1;
+// 	Animation Controlers
+	// MaxFrames = Animation Speed
+	// index, maxIndex = number of sprites 
+	private int frames = 0, maxFrames = 15, index = 0, maxIndex = 1;
+
+//	Sprites
+	private BufferedImage[] rightSprites;
+	private BufferedImage[] leftSprites;
+
+	
+	public int Dir = 1;
 
 	public Player(int x, int y, int width, int height, double speed, BufferedImage sprite) {
 		super(x, y, width, height, speed, sprite);		
 		
-		sprite_left = Game.spritesheet.getSprite(48, 0, 16, 16);
+//		Carregando sprites
+		rightSprites = new BufferedImage[2];
+		leftSprites = new BufferedImage[2];
 		
+		for (int i = 0; i < 2; i++) {
+			rightSprites[i] = Game.spritesheet.getSprite(32 + (i*16), 0, 16, 16);		
+		}
+		for (int i = 0; i < 2; i++) {
+			leftSprites[i] = Game.spritesheet.getSprite(32 + (i*16), 16, 16, 16);			
+		}
+				
 	}
 
 	public void tick() {
@@ -28,12 +46,12 @@ public class Player extends Entity{
 	//		MOVIMENTO		
 			if (right && World.isFree((int)(x+speed), this.getY())) {
 				x+=speed;
-				lastDir = 1;
+				Dir = 1;
 			} 
 			
 			else if (left && World.isFree((int)(x-speed), this.getY())) {
 				x-=speed;	
-				lastDir = -1;
+				Dir = -1;
 			} 
 			
 			if (up && World.isFree(this.getX(), (int)(y-speed))) {
@@ -46,27 +64,42 @@ public class Player extends Entity{
 			
 			catchFruit();
 			
-			if (Game.strawberryCount == Game.strawberryTotal) {
+			if (Game.FoodCount == Game.FoodTotal) {
 				System.out.println("Você ganhou!");
 			}
 			
+			animate();
+			
 		}
 	
-
 	public void render(Graphics g) {
-		if (lastDir == 1) super.render(g);
-		else g.drawImage(sprite_left, this.getX() - Camera.x, this.getY() - Camera.y, null);
+		if (Dir == 1) {
+			g.drawImage(rightSprites[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
+		}
+		else {
+			g.drawImage(leftSprites[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
+		}
 	
 		
 	}
 
-	
+	public void animate() {
+		frames++;			
+		if (frames == maxFrames) {
+			frames = 0;
+			index++;
+			if (index > maxIndex) {
+				index = 0;
+			}
+		}
+	}
+		
 	public void catchFruit() {
 		for (int i = 0; i < Game.entities.size(); i++) {
 			Entity current = Game.entities.get(i);
-			if (current instanceof Strawberry) {
+			if (current instanceof Food) {
 				if (Entity.isColliding(this, current)) {
-					Game.strawberryCount++;
+					Game.FoodCount++;
 					Game.entities.remove(i);
 					return;
 				}
