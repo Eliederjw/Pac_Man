@@ -14,8 +14,13 @@ import com.elieder.world.Vector2i;
 import com.elieder.world.World;
 
 public class Entity {
+	private static int spriteSize = 16;
 	
-	public static BufferedImage FOOD_SPRITE = Game.spritesheet.getSprite(6*16, 0, 16, 16);
+	public static BufferedImage FOOD_SPRITE = Game.spritesheet.getSprite(6 * spriteSize, 0 * spriteSize, spriteSize, spriteSize);
+	public static BufferedImage ENEMY1 = Game.spritesheet.getSprite(0 * spriteSize, 2 * spriteSize, spriteSize, spriteSize);
+	public static BufferedImage ENEMY2 = Game.spritesheet.getSprite(0 * spriteSize, 3 * spriteSize, spriteSize, spriteSize);
+	public static BufferedImage ENEMY3 = Game.spritesheet.getSprite(0 * spriteSize, 4 * spriteSize, spriteSize, spriteSize);
+	public static BufferedImage ENEMY4 = Game.spritesheet.getSprite(0 * spriteSize, 5 * spriteSize, spriteSize, spriteSize);
 	
 	protected double x;
 	protected double y;

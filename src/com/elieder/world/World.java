@@ -6,12 +6,13 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import com.elieder.entities.Enemy;
 import com.elieder.entities.Entity;
 import com.elieder.entities.Food;
 import com.elieder.main.Game;
 
-public class World {
-
+public class World {	
+	
 	public static Tile[] tiles;
 	public static int WIDTH, HEIGHT;
 	public static final int TILE_SIZE = 16;
@@ -44,10 +45,27 @@ public class World {
 						Game.player.setX(xx*16);
 						Game.player.setY(yy*16);
 						
-					}else if(pixelCurrent == 0xFFFF6A00) {
-						// Enemy
-											
 					}else if(pixelCurrent == 0xFFFF0000) {
+						// Enemy 1
+						Enemy enemy = new Enemy (xx*16, yy*16, 16, 16, 1, Entity.ENEMY1);
+						Game.entities.add(enemy);
+						
+					}else if(pixelCurrent == 0xFFFEB2B2) {
+						// Enemy 2
+						Enemy enemy = new Enemy (xx*16, yy*16, 16, 16, 1, Entity.ENEMY2);
+						Game.entities.add(enemy);
+						
+					}else if(pixelCurrent == 0xFF00DEE1) {
+						// Enemy 3
+						Enemy enemy = new Enemy (xx*16, yy*16, 16, 16, 1, Entity.ENEMY3);
+						Game.entities.add(enemy);
+						
+					}else if(pixelCurrent == 0xFFFEA000) {
+						// Enemy 4
+						Enemy enemy = new Enemy (xx*16, yy*16, 16, 16, 1, Entity.ENEMY4);
+						Game.entities.add(enemy);
+						
+					}else if(pixelCurrent == 0xFFFFA468) {
 						//Food
 						Food food = new Food(xx*16, yy*16, 16, 16, 0, Entity.FOOD_SPRITE);
 						Game.entities.add(food);
