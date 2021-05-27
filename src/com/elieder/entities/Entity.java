@@ -21,6 +21,7 @@ public class Entity {
 	public static BufferedImage ENEMY2 = Game.spritesheet.getSprite(0 * spriteSize, 3 * spriteSize, spriteSize, spriteSize);
 	public static BufferedImage ENEMY3 = Game.spritesheet.getSprite(0 * spriteSize, 4 * spriteSize, spriteSize, spriteSize);
 	public static BufferedImage ENEMY4 = Game.spritesheet.getSprite(0 * spriteSize, 5 * spriteSize, spriteSize, spriteSize);
+	public static BufferedImage SCARED_ENEMY = Game.spritesheet.getSprite(0 * spriteSize, 6 * spriteSize, spriteSize, spriteSize);
 	
 	protected double x;
 	protected double y;

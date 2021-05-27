@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 import com.elieder.entities.Enemy;
 import com.elieder.entities.Entity;
 import com.elieder.entities.Food;
+import com.elieder.entities.Player;
 import com.elieder.main.Game;
 
 public class World {	
@@ -98,8 +99,15 @@ public class World {
 			(tiles[x4 + (y4*World.WIDTH)] instanceof WallTile));		
 	}
 	
-	public static void restartGame(String level) {
-		new Game();
+	public static void restartGame() {
+		
+		Game.player = new Player(0, 0, 16, 16, 2, Game.spritesheet.getSprite(32, 0, 16, 16));
+		Game.entities.clear();
+		Game.entities.add(Game.player);
+		Game.FoodTotal = 0;
+		Game.FoodCount = 0;
+		Game.world = new World("/level1.png");
+		
 		return;
 	}
 	

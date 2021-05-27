@@ -6,6 +6,7 @@ import java.util.Random;
 
 import com.elieder.main.Game;
 import com.elieder.world.AStar;
+import com.elieder.world.Camera;
 import com.elieder.world.Vector2i;
 
 public class Enemy extends Entity{	
@@ -19,7 +20,7 @@ public class Enemy extends Entity{
 	}
 		
 	public void tick() {
-	depth = 0;		
+	depth = 1;		
 		
 //		A_STAR. APLICANDO ALGORITMO PARA ACHAR O CAMINHO MAIS CURTO ATÉ O PLAYER		
 			if (ghostMode == false) {
@@ -45,7 +46,8 @@ public class Enemy extends Entity{
 		}
 
 	public void render(Graphics g) {
-		super.render(g);
+		if (ghostMode == false)	super.render(g);
+		else g.drawImage(Entity.SCARED_ENEMY, this.getX() - Camera.x, this.getY() - Camera.y, null);
 	}
 	
 	public void setGhostMode() {

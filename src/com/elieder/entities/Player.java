@@ -41,7 +41,7 @@ public class Player extends Entity{
 	}
 
 	public void tick() {
-			depth = 1;	
+			depth = 0;	
 	
 	//		MOVIMENTO		
 			if (right && World.isFree((int)(x+speed), this.getY())) {
@@ -64,8 +64,9 @@ public class Player extends Entity{
 			
 			catchFruit();
 			
+//			Winning the game
 			if (Game.FoodCount == Game.FoodTotal) {
-				System.out.println("Você ganhou!");
+				World.restartGame();
 			}
 			
 			animate();
