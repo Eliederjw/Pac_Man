@@ -11,12 +11,12 @@ import com.elieder.world.Vector2i;
 
 public class Enemy extends Entity{	
 	
-	private final static int NORMAL = 0;
-	private final static int SCARED = 1;
+	private final  int NORMAL = 0;
+	private final  int SCARED = 1;
 	
 	public boolean ghostMode = false;
-	private static int ghostFrames = 0;	
-	public static int enemyState;
+	private int ghostFrames = 0;	
+	public int enemyState;
 
  	public Enemy(int x, int y, int width, int height, int speed, BufferedImage sprite) {
 		super(x, y, width, height, speed, sprite);	
@@ -51,9 +51,8 @@ public class Enemy extends Entity{
 				}
 			}			
 			
-			ghostFrames++;
-			Game.print(ghostFrames);
-//			setGhostMode();	
+			
+			if (enemyState == SCARED) ghostMode();
 		}
 
 	public void render(Graphics g) {
@@ -68,21 +67,19 @@ public class Enemy extends Entity{
 		
 	}
 	
-	public void setGhostMode() {
+	public void ghostMode() {
 		ghostFrames++;
-		if (ghostFrames == 60) {
+		if (ghostFrames == 60*1) {
+			enemyState = NORMAL;			
 			ghostFrames = 0;
-			if (enemyState == NORMAL) enemyState = SCARED;
-			else enemyState = NORMAL;
 		}
 	}	
 	
-		
-	public static void setStateScared() {
+	public void setScared() {
 		enemyState = SCARED;
 	}
 	
-	public static void setNormal() {
+	public void setNormal() {
 		enemyState = NORMAL;
 	}
 	

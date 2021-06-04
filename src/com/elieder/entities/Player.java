@@ -94,6 +94,16 @@ public class Player extends Entity{
 		}
 	}
 		
+	
+	public void scareEnemies() {
+		for (int i = 0; i < Game.entities.size(); i++) {
+			Entity current = Game.entities.get(i);
+			if (current instanceof Enemy) {
+				((Enemy) current).setScared();
+			}
+		}
+	}
+	
 	public void catchFruit() {
 		for (int i = 0; i < Game.entities.size(); i++) {
 			Entity current = Game.entities.get(i);
@@ -108,8 +118,8 @@ public class Player extends Entity{
 			if (current instanceof Strawberry) {
 				if (Entity.isColliding(this, current)) {
 					Game.entities.remove(i);
-					Game.score += 50;
-//					Enemy.setScared();
+					Game.score += 50;	
+					scareEnemies();
 					return;
 				}
 			}
