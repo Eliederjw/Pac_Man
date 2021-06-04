@@ -46,6 +46,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	
 	public static int FoodTotal = 0;
 	public static int FoodCount = 0;
+	public static int score = 0;
 	
 	public Game() {
 		addKeyListener(this);
@@ -167,6 +168,15 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		bs.show();
 	}
 
+	public static void print(String s) {
+		System.out.println(s);
+	}
+	
+	public static void print(int i) {
+		System.out.println(i);
+	}
+	
+	
 	// KEYBOARD EVENTS
 	@Override
 	public void keyTyped(KeyEvent e) {

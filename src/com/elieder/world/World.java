@@ -10,6 +10,7 @@ import com.elieder.entities.Enemy;
 import com.elieder.entities.Entity;
 import com.elieder.entities.Food;
 import com.elieder.entities.Player;
+import com.elieder.entities.Strawberry;
 import com.elieder.main.Game;
 
 public class World {	
@@ -71,6 +72,11 @@ public class World {
 						Food food = new Food(xx*16, yy*16, 16, 16, 0, Entity.FOOD_SPRITE);
 						Game.entities.add(food);
 						Game.FoodTotal++;
+						
+					}else if(pixelCurrent == 0xFF7F0000) {
+						//Strawberry
+						Strawberry strawberry = new Strawberry(xx*16, yy*16, 16, 16, 0, Entity.STRAWBERRY_SPRITE);
+						Game.entities.add(strawberry);						
 					}
 				}
 			}

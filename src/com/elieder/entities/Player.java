@@ -7,8 +7,8 @@ import com.elieder.main.Game;
 import com.elieder.world.Camera;
 import com.elieder.world.World;
 
-public class Player extends Entity{
-	
+public class Player extends Entity{	
+
 	public boolean right, up, left, down;
 	
 	
@@ -69,8 +69,7 @@ public class Player extends Entity{
 				World.restartGame();
 			}
 			
-			animate();
-			
+			animate();			
 		}
 	
 	public void render(Graphics g) {
@@ -102,6 +101,15 @@ public class Player extends Entity{
 				if (Entity.isColliding(this, current)) {
 					Game.FoodCount++;
 					Game.entities.remove(i);
+					Game.score += 10;
+					return;
+				}
+			}
+			if (current instanceof Strawberry) {
+				if (Entity.isColliding(this, current)) {
+					Game.entities.remove(i);
+					Game.score += 50;
+//					Enemy.setScared();
 					return;
 				}
 			}

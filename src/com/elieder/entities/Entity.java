@@ -17,6 +17,7 @@ public class Entity {
 	private static int spriteSize = 16;
 	
 	public static BufferedImage FOOD_SPRITE = Game.spritesheet.getSprite(6 * spriteSize, 0 * spriteSize, spriteSize, spriteSize);
+	public static BufferedImage STRAWBERRY_SPRITE = Game.spritesheet.getSprite(4 * spriteSize, 0 * spriteSize, spriteSize, spriteSize);
 	public static BufferedImage ENEMY1 = Game.spritesheet.getSprite(0 * spriteSize, 2 * spriteSize, spriteSize, spriteSize);
 	public static BufferedImage ENEMY2 = Game.spritesheet.getSprite(0 * spriteSize, 3 * spriteSize, spriteSize, spriteSize);
 	public static BufferedImage ENEMY3 = Game.spritesheet.getSprite(0 * spriteSize, 4 * spriteSize, spriteSize, spriteSize);
