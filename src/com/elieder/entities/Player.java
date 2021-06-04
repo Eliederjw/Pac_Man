@@ -94,7 +94,6 @@ public class Player extends Entity{
 		}
 	}
 		
-	
 	public void scareEnemies() {
 		for (int i = 0; i < Game.entities.size(); i++) {
 			Entity current = Game.entities.get(i);
