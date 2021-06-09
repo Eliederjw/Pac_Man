@@ -8,7 +8,7 @@ import java.util.List;
 public class AStar {
 	public static double lastTime = System.currentTimeMillis();
 	
-	private static Comparator<Node> nodeSorter = new Comparator<Node>() {	
+	private static Comparator<Node> nodeSorter = new Comparator<Node>() {
 	
 	
 		@Override

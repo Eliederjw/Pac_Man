@@ -34,6 +34,8 @@ public class World {
 					int pixelCurrent = pixels[xx + (yy * map.getWidth())];
 					tiles[xx + (yy * WIDTH)] = new FloorTile(xx*16, yy*16, Tile.TILE_FLOOR);
 					
+					spawnEnemies(pixelCurrent, xx, yy);
+					
 					if (pixelCurrent == 0xFF000000) {
 						//Floor
 						tiles[xx + (yy * WIDTH)] = new FloorTile(xx*16, yy*16, Tile.TILE_FLOOR);
@@ -43,29 +45,12 @@ public class World {
 						tiles[xx + (yy * WIDTH)] = new WallTile(xx*16, yy*16, Tile.TILE_WALL);
 						
 					}else if(pixelCurrent == 0xFF00137F) {
-						// Player						
+						// Player	
 						Game.player.setX(xx*16);
 						Game.player.setY(yy*16);
-						
-					}else if(pixelCurrent == 0xFFFF0000) {
-						// Enemy 1
-						Enemy enemy = new Enemy (xx*16, yy*16, 16, 16, 1, Entity.ENEMY1);
-						Game.entities.add(enemy);
-						
-					}else if(pixelCurrent == 0xFFFEB2B2) {
-						// Enemy 2
-						Enemy enemy = new Enemy (xx*16, yy*16, 16, 16, 1, Entity.ENEMY2);
-						Game.entities.add(enemy);
-						
-					}else if(pixelCurrent == 0xFF00DEE1) {
-						// Enemy 3
-						Enemy enemy = new Enemy (xx*16, yy*16, 16, 16, 1, Entity.ENEMY3);
-						Game.entities.add(enemy);
-						
-					}else if(pixelCurrent == 0xFFFEA000) {
-						// Enemy 4
-						Enemy enemy = new Enemy (xx*16, yy*16, 16, 16, 1, Entity.ENEMY4);
-						Game.entities.add(enemy);
+						Game.player.setOriginPoint(new Vector2i(xx*16, yy*16));
+//						Game.player.setOriginX((double) (xx*16));
+//						Game.player.setOriginY((double) (yy*16));
 						
 					}else if(pixelCurrent == 0xFFFFA468) {
 						//Food
@@ -81,8 +66,32 @@ public class World {
 				}
 			}
 			
-		} catch (IOException e) {			
+		} catch (IOException e) {		
 			e.printStackTrace();
+		}
+	}
+	
+	public static void spawnEnemies(int pixelCurrent, int xx,int yy) {
+		if(pixelCurrent == 0xFFFF0000) {
+			// Enemy 1
+			Enemy enemy = new Enemy (xx*16, yy*16, 16, 16, 1, Entity.ENEMY1);
+			Game.entities.add(enemy);
+			
+		}else if(pixelCurrent == 0xFFFEB2B2) {
+			// Enemy 2
+			Enemy enemy = new Enemy (xx*16, yy*16, 16, 16, 1, Entity.ENEMY2);
+			Game.entities.add(enemy);
+			
+		}else if(pixelCurrent == 0xFF00DEE1) {
+			// Enemy 3
+			Enemy enemy = new Enemy (xx*16, yy*16, 16, 16, 1, Entity.ENEMY3);
+			Game.entities.add(enemy);
+			
+		}else if(pixelCurrent == 0xFFFEA000) {
+			// Enemy 4
+			Enemy enemy = new Enemy (xx*16, yy*16, 16, 16, 1, Entity.ENEMY4);
+			Game.entities.add(enemy);
+			
 		}
 	}
 	
@@ -105,14 +114,25 @@ public class World {
 			(tiles[x4 + (y4*World.WIDTH)] instanceof WallTile));		
 	}
 	
+	public static void repositionElements() {
+		for (int i = 0; i < Game.entities.size(); i++) {
+			Entity current = Game.entities.get(i);
+			
+			
+			if (current instanceof Enemy) 
+				((Enemy) current).repositionEnemy();
+			
+			if (current instanceof Player)
+				((Player) current).repositionPlayer();
+			
+			}
+	}
+	
 	public static void restartGame() {
 		
-		Game.player = new Player(0, 0, 16, 16, 2, Game.spritesheet.getSprite(32, 0, 16, 16));
-		Game.entities.clear();
-		Game.entities.add(Game.player);
-		Game.FoodTotal = 0;
-		Game.FoodCount = 0;
-		Game.world = new World("/level1.png");
+		
+//		Game.player = new Player(0, 0, 16, 16, 2, Game.spritesheet.getSprite(32, 0, 16, 16));
+//		Game.world = new World("/level1.png");
 		
 		return;
 	}

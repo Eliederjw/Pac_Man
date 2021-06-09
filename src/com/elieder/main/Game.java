@@ -72,7 +72,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		frame.add(this);
 		
 		frame.setResizable(false);
-		frame.pack();	
+		frame.pack();
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
@@ -88,7 +88,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		isRunning = false;
 		try {
 			thread.join();
-		} catch (InterruptedException e) {			
+		} catch (InterruptedException e) {	
 			e.printStackTrace();
 		}
 	}
@@ -96,7 +96,6 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public static void main(String[] args) {
 	 Game game = new Game();
 	 game.start();
-	 
 	}
 	
 	@Override
@@ -136,7 +135,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		for (int i = 0; i < entities.size(); i++) {
 			Entity e = entities.get(i);
 			e.tick();
-		}		
+		}
 	}
 
 	public void render () {
@@ -161,7 +160,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		}
 		
 		g.dispose();
-		g = bs.getDrawGraphics();		
+		g = bs.getDrawGraphics();
 		g.drawImage(image, 0, 0, WIDTH * SCALE, HEIGHT * SCALE, null );
 		ui.render(g);
 		
@@ -179,8 +178,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	
 	// KEYBOARD EVENTS
 	@Override
-	public void keyTyped(KeyEvent e) {
-			
+	public void keyTyped(KeyEvent e) {			
 		
 	}
 
