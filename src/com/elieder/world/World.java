@@ -129,10 +129,15 @@ public class World {
 	}
 	
 	public static void restartGame() {
+		Game.entities.clear();
+		Game.player = new Player(0, 0, 16, 16, 2, Game.spritesheet.getSprite(32, 0, 16, 16));
+		Player.life = Player.initialLife;
+		Game.score = 0; 
+		Game.FoodCount = 0;
+		Game.FoodTotal = 0;
 		
-		
-//		Game.player = new Player(0, 0, 16, 16, 2, Game.spritesheet.getSprite(32, 0, 16, 16));
-//		Game.world = new World("/level1.png");
+		Game.world = new World("/level1.png");
+		Game.entities.add(Game.player);
 		
 		return;
 	}

@@ -13,7 +13,7 @@ public class Enemy extends Entity{
 	
 	private final int NORMAL = 0;
 	private final int SCARED = 1;
-	private final int HURTING_PLAYER = 2; 
+	private final int HURTING_PLAYER = 2;
 	private final int WAITING = 3;
 	
 	public boolean ghostMode = false;

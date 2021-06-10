@@ -15,7 +15,7 @@ public class Player extends Entity{
 	
 	public boolean right, up, left, down;
 			
-	public static int life = 3;
+	public static int initialLife = 3, life = initialLife;
 	
 // 	Animation Controlers
 	// MaxFrames = Animation Speed
@@ -181,6 +181,7 @@ public class Player extends Entity{
 			life--;
 			playerState = GETTING_HURT;
 			stopEnemies();
+			if (life <= 0) World.restartGame();
 		}
 	}
 		

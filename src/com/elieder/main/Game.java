@@ -26,7 +26,12 @@ import com.elieder.world.World;
 public class Game extends Canvas implements Runnable, KeyListener, MouseListener, MouseMotionListener {
 	
 	private static final long serialVersionUID = 1L;
-
+	
+	private final int PLAYING = 0, GAME_OVER = 1, START_SCREEN = 2;
+	
+	
+	private int gameState = PLAYING;
+	
 	public static JFrame frame;
 	
 	private Thread thread;
@@ -54,6 +59,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		addMouseMotionListener(this);
 		setPreferredSize(new Dimension(WIDTH*SCALE, HEIGHT*SCALE));
 		initFrame();
+		
+		gameState = PLAYING;
 		
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 		
@@ -167,6 +174,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		bs.show();
 	}
 
+//	Print methods
 	public static void print(String s) {
 		System.out.println(s);
 	}
@@ -175,6 +183,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		System.out.println(i);
 	}
 	
+//	========================================
 	
 	// KEYBOARD EVENTS
 	@Override
