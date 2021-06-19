@@ -13,7 +13,7 @@ import com.elieder.entities.Player;
 import com.elieder.entities.Strawberry;
 import com.elieder.main.Game;
 
-public class World {	
+public class World {
 	
 	public static Tile[] tiles;
 	public static int WIDTH, HEIGHT;
@@ -132,7 +132,7 @@ public class World {
 		Game.entities.clear();
 		Game.player = new Player(0, 0, 16, 16, 2, Game.spritesheet.getSprite(32, 0, 16, 16));
 		Player.life = Player.initialLife;
-		Game.score = 0; 
+		Game.score = 0;
 		Game.FoodCount = 0;
 		Game.FoodTotal = 0;
 		

@@ -7,7 +7,10 @@ import java.util.Random;
 import com.elieder.main.Game;
 import com.elieder.world.AStar;
 import com.elieder.world.Camera;
+import com.elieder.world.FloorTile;
 import com.elieder.world.Vector2i;
+import com.elieder.world.WallTile;
+import com.elieder.world.World;
 
 public class Enemy extends Entity{
 	
@@ -16,20 +19,28 @@ public class Enemy extends Entity{
 	private final int HURTING_PLAYER = 2;
 	private final int WAITING = 3;
 	
+	private boolean gameStarted = true;
+	
 	public boolean ghostMode = false;
 	private int ghostFrames = 0;
 	public int enemyState;
 	
-	private double waitFrames = 0, maxWaitFrames = 0;
+	private boolean right, up, left, down;
+	
+	private int dirX = 0, dirY = 0;
+	
+	private int speed = 1;
+	
+	private double waitFrames = 0, timer = 0;
 	
 	public Vector2i originPoint;
 	
-	public Vector2i target;	
+	public Vector2i target;
 	
  	public Enemy(int x, int y, int width, int height, int speed, BufferedImage sprite) {
 		super(x, y, width, height, speed, sprite);
 		
-		enemyState = NORMAL;
+		enemyState = WAITING;
 		originPoint = new Vector2i(x, y);
 				
 	}
@@ -37,22 +48,45 @@ public class Enemy extends Entity{
 	public void tick() {
 	depth = 1;
 	
-		switch (enemyState) {
-		case NORMAL:
-			target = new Vector2i ((int)(Game.player.x / 16), (int)(Game.player.y / 16));
-			move();
-			break;
-		
-		case SCARED:
-			target = new Vector2i (originPoint.x/16, originPoint.y/16);
-			move();
-			ghostTimer();
-			break;
-		case WAITING:
-			waitTime();
-		
-		}
-		
+		switch (Game.gameState) {
+			
+		case Game.PLAYING:
+			
+			switch (enemyState) {
+			case NORMAL:
+				target = new Vector2i ((int)(Game.player.x / 16), (int)(Game.player.y / 16));
+				move();
+				break;
+			
+			case SCARED:
+				target = new Vector2i (originPoint.x/16, originPoint.y/16);
+				move();
+				ghostTimer();
+				break;
+			case WAITING:
+				waitTime();			
+			}
+			
+//==========================================
+			
+		case Game.START_SCREEN:
+			
+			switch (enemyState) {
+			case WAITING:
+				if (gameStarted == true) {
+					setRandomPlace();
+					setTimer(2);
+					gameStarted = false;
+				}
+				if (waitTime() == false) move();
+				else setNormal();
+				break;
+			
+			case NORMAL:		
+				wander();
+			
+			}
+		}	
 	}
 
 	public void render(Graphics g) {
@@ -86,11 +120,93 @@ public class Enemy extends Entity{
 		}
 	}
 	
+	public void wander() {
+		if (right && World.isFree((int)(x+speed), this.getY())) {			
+			dirX = 1;
+			dirY = 0;
+		}
+		
+		else if (left && World.isFree((int)(x-speed), this.getY())) {
+			dirX = -1;
+			dirY = 0;
+		} 
+		
+		else if (up && World.isFree(this.getX(), (int)(y-speed))) {
+			dirY = -1;
+			dirX = 0;
+		} 
+		
+		else if (down && World.isFree(this.getX(), (int)(y+speed))) {
+			dirY = 1;
+			dirX = 0;
+		} 
+		
+		else {
+			dirX = 0;
+			dirY = 0;
+			changeDirection();
+		}
+				
+		x+=speed*dirX;
+		y+=speed*dirY;
+		
+						
+	}
+	
+	public void setRandomPlace() {
+		boolean bool = false;
+		
+		while (bool == false) {
+			int random = Entity.rand.nextInt(World.tiles.length);
+			if (World.tiles[random] instanceof WallTile) {
+				Game.print("WallTile");			
+			}
+			else if (World.tiles[random] instanceof FloorTile) {
+				Game.print("FloorTile");
+				Game.print(random);
+				bool = true;
+				target = new Vector2i ((int)World.tiles[random].getX()/16, (int) World.tiles[random].getY()/16);
+			}
+		}		
+		
+	}
+	
+	public void changeDirection() {
+		int random = Entity.rand.nextInt(4);
+		
+		right = false;
+		left = false;
+		down = false;
+		up = false;
+	
+		switch (random) {
+		
+		case 0:
+//			if (World.isFree((int)(x+speed), this.getY())) 
+			right = true;			
+			break;
+			
+		
+		case 1:
+//			if (World.isFree((int)(x-speed), this.getY())) 
+			left = true;
+			break;
+		
+		case 2:
+			up = true;
+			break;			
+			
+		case 3:
+			down = true;
+			break;
+		}
+	}
+	
 	public void repositionEnemy () {
 		x = originPoint.x;
 		y = originPoint.y;
 		path = null;
-		setWaiting(1);
+		setWaiting();
 		
 	
 	}
@@ -98,7 +214,7 @@ public class Enemy extends Entity{
 	public void hurtingPlayer() {
 		
 	}
-	
+
 	public void ghostTimer() {
 		ghostFrames++;
 		if (ghostFrames == 60*4) {
@@ -106,13 +222,16 @@ public class Enemy extends Entity{
 			ghostFrames = 0;
 		}
 	}
-		
-	public void waitTime() {
-		waitFrames++;		
-		if (waitFrames == maxWaitFrames*60) {
+
+	public boolean waitTime() {
+			
+		waitFrames++;
+		if (waitFrames == timer*60) {
 			waitFrames = 0;
-			setNormal();
-		}
+			timer = 0;
+			return true;
+		} else return false;
+		
 	}
 	
 	// =========================================			
@@ -124,9 +243,12 @@ public class Enemy extends Entity{
 		enemyState = NORMAL;
 	}
 	
-	public void setWaiting(double time) {
-		enemyState = WAITING;
-		maxWaitFrames = time;
+	public void setTimer(int time) {
+		timer = time;
+	}
+	
+	public void setWaiting() {
+		enemyState = WAITING;		
 	}
 	
 	public void setHurtingPlayer() {

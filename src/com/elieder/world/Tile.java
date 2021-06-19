@@ -24,4 +24,13 @@ public class Tile {
 		
 		
 	}
+	
+	public double getX() {
+		return x;
+	}
+	
+	public double getY() {
+		return y;		
+	}
 }
+

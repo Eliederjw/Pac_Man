@@ -53,30 +53,39 @@ public class Player extends Entity{
 
 	public void tick() {		
 		depth = 0;
-				
-		switch (playerState) {
-		case NORMAL:
-			move();	
-			break;
-		case GETTING_HURT:			
-			dieTiming();
-			break;
+		
+		switch (Game.gameState) {
+		
+		case Game.PLAYING:
+		
+			switch (playerState) {
+			case NORMAL:
+				move();
+				break;
+			case GETTING_HURT:
+				dieTiming();
+				break;
+			}
+			
+			
+			checkCollisions();
+			animate();
+			winTheGame();
 		}
-		
-		
-		checkCollisions();				
-		animate();
-		winTheGame();
 	}
 
 	public void render(Graphics g) {
-		if (Dir == 1) {
-			g.drawImage(rightSprites[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
-		}
-		else {
-			g.drawImage(leftSprites[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
-		}
-	
+		
+		switch (Game.gameState) {
+		
+		case Game.PLAYING:
+			if (Dir == 1) {
+				g.drawImage(rightSprites[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
+			}
+			else {
+				g.drawImage(leftSprites[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
+			}
+		}	
 		
 	}
 
