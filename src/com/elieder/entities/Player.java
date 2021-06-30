@@ -71,6 +71,7 @@ public class Player extends Entity{
 			checkCollisions();
 			animate();
 			winTheGame();
+			break;							
 		}
 	}
 
@@ -190,7 +191,7 @@ public class Player extends Entity{
 			life--;
 			playerState = GETTING_HURT;
 			stopEnemies();
-			if (life <= 0) World.restartGame();
+			if (life <= 0) Game.gameState = Game.GAME_OVER;	
 		}
 	}
 		

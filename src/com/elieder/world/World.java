@@ -121,6 +121,7 @@ public class World {
 			
 			if (current instanceof Enemy) 
 				((Enemy) current).repositionEnemy();
+//				((Enemy) current).setNormal();
 			
 			if (current instanceof Player)
 				((Player) current).repositionPlayer();
@@ -138,6 +139,15 @@ public class World {
 		
 		Game.world = new World("/level1.png");
 		Game.entities.add(Game.player);
+		
+		for (int i = 0; i < Game.entities.size(); i++) {
+			Entity current = Game.entities.get(i);
+			
+			if (current instanceof Enemy) {
+				((Enemy)current).setNormal();
+
+			}
+		}
 		
 		return;
 	}

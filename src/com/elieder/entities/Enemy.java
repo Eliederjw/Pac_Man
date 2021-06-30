@@ -40,7 +40,17 @@ public class Enemy extends Entity{
  	public Enemy(int x, int y, int width, int height, int speed, BufferedImage sprite) {
 		super(x, y, width, height, speed, sprite);
 		
-		enemyState = WAITING;
+		switch (Game.gameState) {
+		
+		case Game.START_SCREEN:
+			enemyState = WAITING;
+			break;
+			
+		case Game.PLAYING:
+			enemyState = NORMAL;
+			break;
+		}
+		
 		originPoint = new Vector2i(x, y);
 				
 	}
@@ -48,13 +58,13 @@ public class Enemy extends Entity{
 	public void tick() {
 	depth = 1;
 	
-		switch (Game.gameState) {
-			
-		case Game.PLAYING:
+		switch (Game.gameState) {		
+		
+		case Game.PLAYING:			
 			
 			switch (enemyState) {
 			case NORMAL:
-				target = new Vector2i ((int)(Game.player.x / 16), (int)(Game.player.y / 16));
+				target = new Vector2i ((int)(Game.player.x/16), (int)(Game.player.y/16));
 				move();
 				break;
 			
@@ -63,9 +73,13 @@ public class Enemy extends Entity{
 				move();
 				ghostTimer();
 				break;
+				
 			case WAITING:
-				waitTime();			
+				setTimer(2);
+				if (waitTime() == true) setNormal();	
+				break;
 			}
+			break;
 			
 //==========================================
 			
@@ -82,11 +96,13 @@ public class Enemy extends Entity{
 				else setNormal();
 				break;
 			
-			case NORMAL:		
+			case NORMAL:
 				wander();
-			
-			}
-		}	
+				break;			
+			}	
+			break;
+		}
+	
 	}
 
 	public void render(Graphics g) {
@@ -94,6 +110,7 @@ public class Enemy extends Entity{
 		case NORMAL, HURTING_PLAYER, WAITING:
 			super.render(g);
 			break;
+			
 		case SCARED:
 			g.drawImage(Entity.SCARED_ENEMY, this.getX() - Camera.x, this.getY() - Camera.y, null);		
 			break;
@@ -117,7 +134,8 @@ public class Enemy extends Entity{
 			Vector2i end = target;
 			
 			path = AStar.findPath(Game.world, start, end);
-		}
+			}		
+		
 	}
 	
 	public void wander() {
@@ -148,8 +166,7 @@ public class Enemy extends Entity{
 		}
 				
 		x+=speed*dirX;
-		y+=speed*dirY;
-		
+		y+=speed*dirY;		
 						
 	}
 	
@@ -159,11 +176,9 @@ public class Enemy extends Entity{
 		while (bool == false) {
 			int random = Entity.rand.nextInt(World.tiles.length);
 			if (World.tiles[random] instanceof WallTile) {
-				Game.print("WallTile");			
+				continue;			
 			}
 			else if (World.tiles[random] instanceof FloorTile) {
-				Game.print("FloorTile");
-				Game.print(random);
 				bool = true;
 				target = new Vector2i ((int)World.tiles[random].getX()/16, (int) World.tiles[random].getY()/16);
 			}

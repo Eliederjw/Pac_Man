@@ -17,6 +17,7 @@ import java.util.List;
 
 import javax.swing.JFrame;
 
+import com.elieder.entities.Enemy;
 import com.elieder.entities.Entity;
 import com.elieder.entities.Player;
 import com.elieder.graficos.Spritesheet;
@@ -59,7 +60,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		setPreferredSize(new Dimension(WIDTH*SCALE, HEIGHT*SCALE));
 		initFrame();
 		
-		gameState = START_SCREEN;
+		gameState = GAME_OVER;
 		
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 		
@@ -194,52 +195,75 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	
 	// KEYBOARD EVENTS
 	@Override
-	public void keyTyped(KeyEvent e) {			
+	public void keyTyped(KeyEvent e) {
 		
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-	
-		if (e.getKeyCode() == KeyEvent.VK_RIGHT ||
-				e.getKeyCode() == KeyEvent.VK_D) {
-			player.right = true;
-			
-		}else if (e.getKeyCode() == KeyEvent.VK_LEFT ||
-				e.getKeyCode() == KeyEvent.VK_A) {
-			player.left = true;
-		}
 		
-		if (e.getKeyCode() == KeyEvent.VK_UP ||
-				e.getKeyCode() == KeyEvent.VK_W) {
-			player.up = true;
+		switch (Game.gameState) {
+		
+		case Game.PLAYING:
+	
+			if (e.getKeyCode() == KeyEvent.VK_RIGHT ||
+					e.getKeyCode() == KeyEvent.VK_D) {
+				player.right = true;
+				
+			}else if (e.getKeyCode() == KeyEvent.VK_LEFT ||
+					e.getKeyCode() == KeyEvent.VK_A) {
+				player.left = true;
+			}
 			
-		}else if (e.getKeyCode() == KeyEvent.VK_DOWN ||
-				e.getKeyCode() == KeyEvent.VK_S) {
-			player.down = true;
-
-		}				
+			if (e.getKeyCode() == KeyEvent.VK_UP ||
+					e.getKeyCode() == KeyEvent.VK_W) {
+				player.up = true;
+				
+			}else if (e.getKeyCode() == KeyEvent.VK_DOWN ||
+					e.getKeyCode() == KeyEvent.VK_S) {
+				player.down = true;
+				
+	
+			}			
+		}
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_RIGHT ||
-				e.getKeyCode() == KeyEvent.VK_D) {
-			player.right = false;
+		
+		switch (Game.gameState) {
+		
+		case Game.PLAYING:
+			if (e.getKeyCode() == KeyEvent.VK_RIGHT ||
+			e.getKeyCode() == KeyEvent.VK_D) {
+				player.right = false;
+				
+			}else if (e.getKeyCode() == KeyEvent.VK_LEFT ||
+					e.getKeyCode() == KeyEvent.VK_A) {
+				player.left = false;
+			}
 			
-		}else if (e.getKeyCode() == KeyEvent.VK_LEFT ||
-				e.getKeyCode() == KeyEvent.VK_A) {
-			player.left = false;
+			if (e.getKeyCode() == KeyEvent.VK_UP ||
+					e.getKeyCode() == KeyEvent.VK_W) {
+				player.up = false;
+				
+			}else if (e.getKeyCode() == KeyEvent.VK_DOWN ||
+					e.getKeyCode() == KeyEvent.VK_S) {
+				player.down = false;
+			}
+			break;
+			
+		case Game.START_SCREEN:
+			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+				Game.gameState = Game.PLAYING;
+				World.restartGame();
+				break;
+	
+			}
 		}
 		
-		if (e.getKeyCode() == KeyEvent.VK_UP ||
-				e.getKeyCode() == KeyEvent.VK_W) {
-			player.up = false;
-			
-		}else if (e.getKeyCode() == KeyEvent.VK_DOWN ||
-				e.getKeyCode() == KeyEvent.VK_S) {
-			player.down = false;
-		}		
+		
+		
 	}
 
 	// MOUSE EVENTS
