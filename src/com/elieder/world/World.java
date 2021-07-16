@@ -19,22 +19,21 @@ public class World {
 	public static int WIDTH, HEIGHT;
 	public static final int TILE_SIZE = 16;
 	
+	private BufferedImage map;
+	private String path;
+	private int[] pixels;
+	
 		
 	public World(String path) {
-		try {
-			BufferedImage map = ImageIO.read(getClass().getResource(path));
-			int[] pixels = new int[map.getWidth() * map.getHeight()];
-			WIDTH = map.getWidth();
-			HEIGHT = map.getHeight();
-			tiles = new Tile[map.getWidth() * map.getHeight()];
-			map.getRGB(0, 0, map.getWidth(), map.getHeight(), pixels, 0, map.getWidth());
+			this.path = path;
+			
+			loadMap();			
 			
 			for (int xx = 0; xx < map.getWidth(); xx++) {
 				for (int yy = 0; yy < map.getHeight(); yy ++) {
 					int pixelCurrent = pixels[xx + (yy * map.getWidth())];
 					tiles[xx + (yy * WIDTH)] = new FloorTile(xx*16, yy*16, Tile.TILE_FLOOR);
 					
-					spawnEnemies(pixelCurrent, xx, yy);
 					
 					if (pixelCurrent == 0xFF000000) {
 						//Floor
@@ -66,32 +65,53 @@ public class World {
 				}
 			}
 			
-		} catch (IOException e) {		
-			e.printStackTrace();
-		}
+			spawnFood();			
+			spawnEnemies();			
+		
 	}
 	
-	public static void spawnEnemies(int pixelCurrent, int xx,int yy) {
-		if(pixelCurrent == 0xFFFF0000) {
-			// Enemy 1
-			Enemy enemy = new Enemy (xx*16, yy*16, 16, 16, 1, Entity.ENEMY1);
-			Game.entities.add(enemy);
-			
-		}else if(pixelCurrent == 0xFFFEB2B2) {
-			// Enemy 2
-			Enemy enemy = new Enemy (xx*16, yy*16, 16, 16, 1, Entity.ENEMY2);
-			Game.entities.add(enemy);
-			
-		}else if(pixelCurrent == 0xFF00DEE1) {
-			// Enemy 3
-			Enemy enemy = new Enemy (xx*16, yy*16, 16, 16, 1, Entity.ENEMY3);
-			Game.entities.add(enemy);
-			
-		}else if(pixelCurrent == 0xFFFEA000) {
-			// Enemy 4
-			Enemy enemy = new Enemy (xx*16, yy*16, 16, 16, 1, Entity.ENEMY4);
-			Game.entities.add(enemy);
-			
+	private void spawnEnemies() {	
+		for (int xx = 0; xx < map.getWidth(); xx++) {
+			for (int yy = 0; yy < map.getHeight(); yy ++) {
+				int pixelCurrent = pixels[xx + (yy * map.getWidth())];
+				
+			if(pixelCurrent == 0xFFFF0000) {
+				// Enemy 1
+				Enemy enemy = new Enemy (xx*16, yy*16, 16, 16, 1, Entity.ENEMY1);
+				Game.entities.add(enemy);
+				
+			}else if(pixelCurrent == 0xFFFEB2B2) {
+				// Enemy 2
+				Enemy enemy = new Enemy (xx*16, yy*16, 16, 16, 1, Entity.ENEMY2);
+				Game.entities.add(enemy);
+				
+			}else if(pixelCurrent == 0xFF00DEE1) {
+				// Enemy 3
+				Enemy enemy = new Enemy (xx*16, yy*16, 16, 16, 1, Entity.ENEMY3);
+				Game.entities.add(enemy);
+				
+			}else if(pixelCurrent == 0xFFFEA000) {
+				// Enemy 4
+				Enemy enemy = new Enemy (xx*16, yy*16, 16, 16, 1, Entity.ENEMY4);
+				Game.entities.add(enemy);
+				
+			}
+		}
+	}					
+}
+	
+	private void spawnFood() {
+		for (int xx = 0; xx < map.getWidth(); xx++) {
+			for (int yy = 0; yy < map.getHeight(); yy ++) {
+				int pixelCurrent = pixels[xx + (yy * map.getWidth())];
+				
+				if(pixelCurrent == 0xFFFFA468) {
+					//Food
+					Food food = new Food(xx*16, yy*16, 16, 16, 0, Entity.FOOD_SPRITE);
+					Game.entities.add(food);
+					Game.FoodTotal++;
+				}		
+			}
 		}
 	}
 	
@@ -137,7 +157,7 @@ public class World {
 		Game.FoodCount = 0;
 		Game.FoodTotal = 0;
 		
-		Game.world = new World("/level1.png");
+		Game.world = new World("/level.png");
 		Game.entities.add(Game.player);
 		
 		for (int i = 0; i < Game.entities.size(); i++) {
@@ -150,6 +170,41 @@ public class World {
 		}
 		
 		return;
+	}
+	
+	public static void newLevel() {
+		Game.entities.clear();
+		Game.player = new Player(0, 0, 16, 16, 2, Game.spritesheet.getSprite(32, 0, 16, 16));
+		Game.FoodCount = 0;
+		Game.FoodTotal = 0;
+		
+		Game.world = new World("/level.png");
+		Game.entities.add(Game.player);
+		
+		for (int i = 0; i < Game.entities.size(); i++) {
+			Entity current = Game.entities.get(i);
+			
+			if (current instanceof Enemy) {
+				((Enemy)current).setNormal();
+				
+			}
+		}
+		
+		return;
+	}
+	
+	private void loadMap() {
+		try {
+			this.map = ImageIO.read(getClass().getResource(path));
+			pixels = new int[map.getWidth() * map.getHeight()];
+			WIDTH = map.getWidth();
+			HEIGHT = map.getHeight();
+			tiles = new Tile[map.getWidth() * map.getHeight()];
+			map.getRGB(0, 0, map.getWidth(), map.getHeight(), pixels, 0, map.getWidth());
+			
+		} catch (IOException e) {		
+			e.printStackTrace();
+		}
 	}
 	
 	public void render (Graphics g) {
@@ -165,7 +220,8 @@ public class World {
 				if (xx < 0 || yy < 0 || xx >= WIDTH || yy >= HEIGHT)
 					continue;
 				Tile tile = tiles[xx + (yy*WIDTH)];
-				tile.render(g);
+				if (tile == null) continue;
+				else tile.render(g);
 			}
 		}
 	}

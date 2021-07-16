@@ -16,13 +16,16 @@ import com.elieder.world.World;
 public class Entity {
 	private static int spriteSize = 16;
 	
-	public static BufferedImage FOOD_SPRITE = Game.spritesheet.getSprite(6 * spriteSize, 0 * spriteSize, spriteSize, spriteSize);
-	public static BufferedImage STRAWBERRY_SPRITE = Game.spritesheet.getSprite(4 * spriteSize, 0 * spriteSize, spriteSize, spriteSize);
-	public static BufferedImage ENEMY1 = Game.spritesheet.getSprite(0 * spriteSize, 2 * spriteSize, spriteSize, spriteSize);
-	public static BufferedImage ENEMY2 = Game.spritesheet.getSprite(0 * spriteSize, 3 * spriteSize, spriteSize, spriteSize);
-	public static BufferedImage ENEMY3 = Game.spritesheet.getSprite(0 * spriteSize, 4 * spriteSize, spriteSize, spriteSize);
-	public static BufferedImage ENEMY4 = Game.spritesheet.getSprite(0 * spriteSize, 5 * spriteSize, spriteSize, spriteSize);
-	public static BufferedImage SCARED_ENEMY = Game.spritesheet.getSprite(0 * spriteSize, 6 * spriteSize, spriteSize, spriteSize);
+	public static BufferedImage FOOD_SPRITE = Game.spritesheet.getSprite(0 * spriteSize, 8 * spriteSize, spriteSize, spriteSize);
+	public static BufferedImage STRAWBERRY_SPRITE = Game.spritesheet.getSprite(0 * spriteSize, 7 * spriteSize, spriteSize, spriteSize);
+	public static BufferedImage[] ENEMY1;
+	public static BufferedImage[] ENEMY2;
+	public static BufferedImage[] ENEMY3;
+	public static BufferedImage[] ENEMY4;
+	public static BufferedImage SCARED_ENEMY[];
+	public static BufferedImage EATEN_ENEMY[];
+	
+	protected int dirX = 0, dirY = 0;
 	
 	protected double x;
 	protected double y;
@@ -32,7 +35,7 @@ public class Entity {
 	
 	public int depth;
 	
-	protected List<Node> path;
+	
 	
 	private BufferedImage sprite;
 	
@@ -45,6 +48,39 @@ public class Entity {
 		this.width = width;
 		this.height = height;
 		this.sprite = sprite;
+		
+		ENEMY1 = new BufferedImage[4];
+		ENEMY2 = new BufferedImage[4];
+		ENEMY3 = new BufferedImage[4];
+		ENEMY4 = new BufferedImage[4];
+		SCARED_ENEMY = new BufferedImage[2];
+		EATEN_ENEMY = new BufferedImage[2];
+		
+		
+		for (int i = 0; i < 4; i++) {
+			ENEMY1[i] = Game.spritesheet.getSprite(0 * spriteSize + (i*spriteSize), 2 * spriteSize, spriteSize, spriteSize);
+		}
+		
+		for (int i = 0; i < 4; i++) {
+			ENEMY2[i] = Game.spritesheet.getSprite(0 * spriteSize + (i*spriteSize), 3 * spriteSize, spriteSize, spriteSize);
+		}
+		
+		for (int i = 0; i < 4; i++) {
+			ENEMY3[i] = Game.spritesheet.getSprite(0 * spriteSize + (i*spriteSize), 4 * spriteSize, spriteSize, spriteSize);
+		}
+		
+		for (int i = 0; i < 4; i++) {
+			ENEMY4[i] = Game.spritesheet.getSprite(0 * spriteSize + (i*spriteSize), 5 * spriteSize, spriteSize, spriteSize);
+		}
+		
+		for (int i = 0; i < 2; i++) {
+			SCARED_ENEMY[i] = Game.spritesheet.getSprite(0 * spriteSize + (i*spriteSize), 6 * spriteSize, spriteSize, spriteSize);
+		}
+		
+		for (int i = 0; i < 2; i++) {
+			EATEN_ENEMY[i] = Game.spritesheet.getSprite(2 * spriteSize + (i*spriteSize), 6 * spriteSize, spriteSize, spriteSize);
+		}
+		
 	}
 	
 	public static Comparator<Entity> nodeSorter = new Comparator<Entity>() {	
@@ -93,30 +129,7 @@ public class Entity {
 	public double calculateDistance(int x1, int y1, int x2, int y2) {
 		return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
 	}
-	
-	public void followPath (List<Node> path) {
-		if (path != null) {
-			if (path.size() > 0) {
-				Vector2i target = path.get(path.size() - 1).tile;
-				if (x < target.x * 16) {
-					x ++;
-				}else if (x > target.x * 16) {
-					x --;
-				}
-				
-				if (y < target.y * 16) {
-					y ++;
-				}else if (y > target.y * 16) {
-					y --;
-				}
-				
-				if (x == target.x * 16 && y == target.y * 16) {
-					path.remove(path.size() - 1);
-				}
-			}
-		}
-	}
-	
+		
 	public static boolean isColliding(Entity e1, Entity e2) {
 		Rectangle e1Mask = new Rectangle(e1.getX(), e1.getY(), e1.getWidth(), e1.getHeight());
 		Rectangle e2Mask = new Rectangle(e2.getX(), e2.getY(), e2.getWidth(), e2.getHeight());

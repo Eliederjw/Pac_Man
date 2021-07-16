@@ -19,9 +19,12 @@ public class UI {
 	
 	private int gameOverFrames = 0, maxGameOverTime = 5;
 	
+	private int scoreScreenFrames = 0, maxScoreScreenTime = 3;
+	
 	private int colorRate = 1;
 	
 	private boolean gameOverEntered = false;
+	private boolean scoreEntered = false;
 	
 	public void render(Graphics g) {
 			
@@ -32,8 +35,9 @@ public class UI {
 			if (gameOverTimer() == false) {
 				g.setColor(new Color(255/colorRate, 255/colorRate, 255/colorRate, 255));
 				g.setFont(new Font("arial", Font.BOLD, 40));
-				g.drawString("Game Over", ((Game.WIDTH*Game.SCALE)/2) - (210/2), 250);
-				
+				g.drawString("Game Over", ((Game.WIDTH*Game.SCALE)/2) - (210/2), 250);		
+				g.setFont(new Font("arial", Font.BOLD, 25));
+				g.drawString("Your Score: " + Game.score, 34, 440);
 			}			
 			else {
 				World.restartGame();
@@ -47,8 +51,8 @@ public class UI {
 		case Game.START_SCREEN:
 			g.setColor(new Color(255, 255, 255, alpha));
 			g.setFont(new Font("arial", Font.BOLD, 25));
-			g.drawString("Press <Enter> to start", ((Game.WIDTH*Game.SCALE)/2) - (260/2), 250);
-//			g.drawString("D", 260, 100);
+			g.drawString("Press <Enter> to start", ((Game.WIDTH*Game.SCALE)/2) - (260/2), 250);					
+//			g.drawString("D", 132, 280);
 			
 			animatePressStart();
 			break;
@@ -66,6 +70,20 @@ public class UI {
 				
 			}
 			break;
+			
+		case Game.LEVEL_SCREEN:
+			onEnterLevel();
+			if (levelScreenTimer() == false) {
+				g.setColor(new Color(255/colorRate, 255/colorRate, 255/colorRate, 255));
+				g.setFont(new Font("arial", Font.BOLD, 40));
+				g.drawString("Level " + Game.level, ((Game.WIDTH*Game.SCALE)/2) - (150/2), 250);
+			
+			} else {
+				World.newLevel();
+				Game.gameState = Game.PLAYING;
+				scoreEntered = false;
+			}
+			
 		}		
 		
 	}
@@ -99,15 +117,33 @@ public class UI {
 	
 	public void onEnterGameOver() {
 		if (gameOverEntered == false) {
-			gameOverEntered = true;			
+			gameOverEntered = true;	
+			scoreScreenFrames = 0;
+			Game.level = 0;
 			frames = 0;			
 		}
 	}
 	
-	public boolean gameOverTimer() {
+	public void onEnterLevel() {
+		if (scoreEntered == false) {
+			scoreEntered = true;
+			scoreScreenFrames = 0;
+		}
+	}
+	
+ 	public boolean gameOverTimer() {
 		gameOverFrames++;
 		if (gameOverFrames == maxGameOverTime * 60) {
 			gameOverFrames = 0;
+			return true;
+		}
+		return false;
+	}
+ 	
+ 	public boolean levelScreenTimer() {
+ 		scoreScreenFrames++;
+		if (scoreScreenFrames == maxScoreScreenTime * 60) {
+			scoreScreenFrames = 0;
 			return true;
 		}
 		return false;

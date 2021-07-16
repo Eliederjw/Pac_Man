@@ -14,19 +14,25 @@ public class Player extends Entity{
 	private int playerState;
 	
 	public boolean right, up, left, down;
+	
+	private final int spriteSize = 16;
 			
 	public static int initialLife = 3, life = initialLife;
 	
 // 	Animation Controlers
 	// MaxFrames = Animation Speed
 	// index, maxIndex = number of sprites
-	private int frames = 0, maxFrames = 15, index = 0, maxIndex = 1;	
+	private int frames , maxFrames, index, maxIndex;
+	
+	private boolean onNormalEntered = false;
+	private boolean onGettingHurt = false;
 	
 	private int dieFrames = 0, maxDieFrames = 1;
 
 //	Sprites
 	private BufferedImage[] rightSprites;
 	private BufferedImage[] leftSprites;
+	private BufferedImage[] dyingSprites;
 
 	public Vector2i originPoint;	
 	
@@ -41,13 +47,18 @@ public class Player extends Entity{
 //		Carregando sprites
 		rightSprites = new BufferedImage[2];
 		leftSprites = new BufferedImage[2];
+		dyingSprites = new BufferedImage[5];
 		
 		for (int i = 0; i < 2; i++) {
-			rightSprites[i] = Game.spritesheet.getSprite(32 + (i*16), 0, 16, 16);		
-		}
-		for (int i = 0; i < 2; i++) {
-			leftSprites[i] = Game.spritesheet.getSprite(32 + (i*16), 16, 16, 16);			
+			rightSprites[i] = Game.spritesheet.getSprite(0 * spriteSize + (i*spriteSize), 1 * spriteSize, spriteSize, spriteSize);
 		}		
+		for (int i = 0; i < 2; i++) {
+			leftSprites[i] = Game.spritesheet.getSprite(2 * spriteSize + (i*spriteSize), 1 * spriteSize, spriteSize, spriteSize);			
+		}
+		
+		for (int i = 0; i < 5; i++) {
+			dyingSprites[i] = Game.spritesheet.getSprite(5 * spriteSize + (i*spriteSize), 1 * spriteSize, spriteSize, spriteSize);
+		}
 								
 	}
 
@@ -56,17 +67,19 @@ public class Player extends Entity{
 		
 		switch (Game.gameState) {
 		
-		case Game.PLAYING:
+		case Game.PLAYING:			
 		
 			switch (playerState) {
 			case NORMAL:
 				move();
+				
+				
+				
 				break;
 			case GETTING_HURT:
 				dieTiming();
 				break;
 			}
-			
 			
 			checkCollisions();
 			animate();
@@ -79,13 +92,41 @@ public class Player extends Entity{
 		
 		switch (Game.gameState) {
 		
-		case Game.PLAYING:
-			if (Dir == 1) {
-				g.drawImage(rightSprites[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
-			}
-			else {
-				g.drawImage(leftSprites[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
-			}
+		case Game.PLAYING, Game.LEVEL_SCREEN:
+			
+			switch(playerState) {
+			
+			case NORMAL:
+				if (onNormalEntered == false) {
+					onNormalEntered = true;
+					frames = 0;
+					maxFrames = 15;
+					index = 0;
+					maxIndex = 1;
+				}
+				
+				if (Dir == 1) {
+					g.drawImage(rightSprites[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
+				}
+				else {
+					g.drawImage(leftSprites[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
+				}
+				break;
+				
+			case GETTING_HURT:
+				if (onGettingHurt == false) {
+					onGettingHurt = true;
+					frames = 0;
+					maxFrames = 12;
+					index = 0;
+					maxIndex = 4;
+				}
+				
+				g.drawImage(dyingSprites[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
+				break;
+			}				
+			break;
+		
 		}	
 		
 	}
@@ -152,8 +193,11 @@ public class Player extends Entity{
 				catchStrawberry(current, i);
 			}			
 			if (current instanceof Enemy) {
-				if (((Enemy) current).getEnemyState() == 0) 
+				if (((Enemy) current).getEnemyState() == Enemy.NORMAL) 
 				getHurt(current, i);
+				
+				else if (((Enemy) current).getEnemyState() == Enemy.SCARED) 
+				eatEnemy(current, i);
 			}
 			
 		}
@@ -176,6 +220,14 @@ public class Player extends Entity{
 	public void setOriginPoint(Vector2i originPoint) {
 		this.originPoint = originPoint;		
 	}
+		
+	private void eatEnemy(Entity entity, int i) {
+		if (Entity.isColliding(this, entity)) {
+			Game.score += 100;
+			((Enemy) entity).getEaten();
+			return;
+		}
+	}
 	
 	private void catchStrawberry(Entity entity, int i) {
 		if (Entity.isColliding(this, entity)) {
@@ -190,8 +242,8 @@ public class Player extends Entity{
 		if (Entity.isColliding(this, entity)) {
 			life--;
 			playerState = GETTING_HURT;
-			stopEnemies();
-			if (life <= 0) Game.gameState = Game.GAME_OVER;	
+			onGettingHurt = false;
+			stopEnemies();	
 		}
 	}
 		
@@ -200,14 +252,17 @@ public class Player extends Entity{
 		if (dieFrames == maxDieFrames * 60) {
 			World.repositionElements();
 			playerState = NORMAL;
+			onNormalEntered = false;
 			dieFrames = 0;
+			if (life <= 0) Game.gameState = Game.GAME_OVER;	
 		}
 	}
 	
 	private void winTheGame() {
 //		Winning the game
 	if (Game.FoodCount == Game.FoodTotal) {
-		World.restartGame();
+		Game.gameState = Game.LEVEL_SCREEN;
+		Game.level++;
 		}
 	}	
 }

@@ -28,9 +28,11 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	
 	private static final long serialVersionUID = 1L;
 	
-	public static final int PLAYING = 0, GAME_OVER = 1, START_SCREEN = 2;
+	public static final int PLAYING = 0, GAME_OVER = 1, START_SCREEN = 2, LEVEL_SCREEN = 3;
 	
-	public static int gameState =PLAYING;
+	public static int gameState = START_SCREEN;
+	
+	public static int level = 1;
 	
 	public static JFrame frame;
 	
@@ -60,7 +62,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		setPreferredSize(new Dimension(WIDTH*SCALE, HEIGHT*SCALE));
 		initFrame();
 		
-		gameState = GAME_OVER;
+		gameState = START_SCREEN;
 		
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 		
@@ -68,7 +70,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		spritesheet = new Spritesheet("/Spritesheet.png");
 		entities = new ArrayList<Entity>();
 		player = new Player(0, 0, 16, 16, 2, spritesheet.getSprite(32, 0, 16, 16));
-		world = new World("/level1.png");
+		world = new World("/level.png");
 		ui = new UI();
 		entities.add(player);
 	
@@ -159,7 +161,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		world.render(g);
 		
 //		Render entities
-		Collections.sort(entities, Entity.nodeSorter);
+//		Collections.sort(entities, Entity.nodeSorter);
 		
 		for (int i = 0; i < entities.size(); i++) {
 			Entity e = entities.get(i);

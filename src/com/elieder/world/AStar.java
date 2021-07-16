@@ -59,6 +59,7 @@ public class AStar {
 			
 			for (int i = 0; i < 9; i++) {
 				if (i == 4) continue;
+				
 				int x = current.tile.x;
 				int y = current.tile.y;
 				int xi = (i%3) - 1;
