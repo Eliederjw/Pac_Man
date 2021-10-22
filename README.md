@@ -1,4 +1,5 @@
-# Pac_Man
-Aulas do curso Danki Code Desenvolvimento de Games - Game #02_Pac_Man
+# Pac-Man-Clone
+
+#### Game 02 desenvolvido no Curso de Desenvolvimento de Games da Danki Code
 
 ![GitHub Logo](/Pac Man.gif)
